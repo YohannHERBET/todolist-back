@@ -30,8 +30,11 @@ if ($uri[1] !== 'taches') {
 $taskController = new TaskController(Database::getConnection());
 
 switch ($method) {
+    case 'GET':
+        $taskController->getAllTasks();
+        break;
     case 'POST':
-        $taskController->create();
+        $taskController->createTask();
         break;
     // if we don't have a case, it's a default, the default return a 405 status code, because method not supported
     default:

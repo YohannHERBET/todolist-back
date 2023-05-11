@@ -13,6 +13,17 @@ class Task
         $this->connection = $db;
     }
 
+    public function fetchAll() {
+        // SQL query to retrieve all tasks from the "tasks" table
+        $sql = "SELECT * FROM tasks";
+
+        // Launch the request
+        $stmt = $this->connection->query($sql);
+
+        // Return the result of the query
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Method for create a task
     public function create($date, $name, $description)
     {
