@@ -1,0 +1,10 @@
+{
+    "name": "back/todolist",
+    "description": "Todolist with a notification if the due date is today",
+    "require": {
+        "symfony/var-dumper": "^5.3"
+    },
+    "autoload": {
+        "psr-4": {"App\\": "app/"}
+    }
+}
