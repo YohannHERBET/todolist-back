@@ -1,7 +1,7 @@
 <?php
 require_once 'connection.php';
 
-$createDatabase = "CREATE DATABASE IF NOT EXISTS $database";
+$createDatabase = "CREATE DATABASE IF NOT EXISTS $database CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
 if ($mysql->query($createDatabase)) {
     echo "The '$database' database has been created successfully." . PHP_EOL;
 } else {
@@ -15,7 +15,8 @@ $createTable = "CREATE TABLE IF NOT EXISTS tasks (
     date DATE NOT NULL,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(500)
-)";
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+
 if ($mysql->query($createTable)) {
     echo "The 'tasks' table has been created successfully." . PHP_EOL;
 } else {
