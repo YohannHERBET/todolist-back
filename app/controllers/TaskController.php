@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Models\Task;
 use PDO;
+use InvalidArgumentException;
 
 class TaskController {
     private $db;
@@ -34,25 +35,13 @@ class TaskController {
         // Retrieve the data from the request body and decode it as JSON
         $data = json_decode(file_get_contents("php://input"));
 
-        // Validation and sanitize the data
-        $date = filter_var($data->date, FILTER_SANITIZE_STRING);
-        // preg_match for search with regex expression
-        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
-            return false;
+        // validation and sanitize the data
+        $data = $this->validateAndSanitizeTaskData($data);
+        if (!$data) {
+            header('HTTP/1.1 400 Bad Request');
+            echo json_encode(['message' => 'Invalid input data']);
+            exit();
         }
-        $data->date = $date;
-    
-        $name = filter_var($data->name, FILTER_SANITIZE_STRING);
-        if (empty($name)) {
-            return false;
-        }
-        $data->name = $name;
-    
-        $description = filter_var($data->description, FILTER_SANITIZE_STRING);
-        if (empty($description)) {
-            return false;
-        }
-        $data->description = $description;
 
         if ($task->create($data->date, $data->name, $data->description)) {
             echo json_encode(['message' => 'Task created']);
@@ -60,10 +49,34 @@ class TaskController {
             echo json_encode(['message' => 'Error while creating the task']);
         }
     }
+    // Update a task
+    public function updateTask($id)
+    {
+        // Update the Task object, passing the database connection to the constructor
+        $task = new Task($this->db);
+
+        // Retrieve the data from the request body and decode it as JSON
+        $data = json_decode(file_get_contents("php://input"));
+
+        // validation and sanitize the data
+        $data = $this->validateAndSanitizeTaskData($data);
+        if (!$data) {
+            header('HTTP/1.1 400 Bad Request');
+            echo json_encode(['message' => 'Invalid input data']);
+            exit();
+        }
+
+        if ($task->update($id, $data->date, $data->name, $data->description)) {
+            echo json_encode(['message' => 'Task updated']);
+        } else {
+            echo json_encode(['message' => 'Error while updating the task']);
+        }
+    }
+
     // Delete a task
     public function deleteTask($id)
     {
-        // Create a new Task object, passing the database connection to the constructor
+        // Delete the task object, passing the database connection to the constructor
         $task = new Task($this->db);
         
         // Validation and sanitize for id
@@ -80,5 +93,31 @@ class TaskController {
             echo json_encode(['message' => 'Error while deleting the task']);
         }
     }
+
+    // Validate and sanitize the data
+    private function validateAndSanitizeTaskData($data)
+    {
+        $date = filter_var($data->date, FILTER_SANITIZE_STRING);
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            throw new InvalidArgumentException("Date format is invalid");
+        }
+    
+        $name = filter_var($data->name, FILTER_SANITIZE_STRING);
+        if (empty($name)) {
+            throw new InvalidArgumentException("Task name is required");
+        }
+        
+        // Check if the description property exists and is not an empty string, sanitize it, or set it to an empty string
+        $description = (isset($data->description) && $data->description !== "") ? filter_var($data->description, FILTER_SANITIZE_STRING) : "";
+    
+        // Here return a table convert in object
+        // If it's need for the futur, we can create a class for this
+        return (object) [
+            'date' => $date,
+            'name' => $name,
+            'description' => $description
+        ];
+    }
+    
 }
 ?>

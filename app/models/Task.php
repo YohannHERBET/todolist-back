@@ -41,6 +41,25 @@ class Task
         // Execute the prepared query
         return $stmt->execute();
     }
+    // Method for update a task
+    public function update($id, $date, $name, $description)
+    {
+        // SQL query to update a task into the "tasks" table
+        $sql = "UPDATE tasks SET date = :date, name = :name, description = :description WHERE id = :id";
+        
+        // Prepare the SQL query using the PDO connection
+        $stmt = $this->connection->prepare($sql);
+
+        // Bind the values to the prepared query parameters
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':description', $description);
+
+        // Execute the prepared query
+        return $stmt->execute();
+    }
+
     // Method for delete a task
     public function delete($id)
     {
