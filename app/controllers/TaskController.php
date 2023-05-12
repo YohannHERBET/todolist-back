@@ -60,5 +60,25 @@ class TaskController {
             echo json_encode(['message' => 'Error while creating the task']);
         }
     }
+    // Delete a task
+    public function deleteTask($id)
+    {
+        // Create a new Task object, passing the database connection to the constructor
+        $task = new Task($this->db);
+        
+        // Validation and sanitize for id
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        if (empty($id)) {
+            header('HTTP/1.1 400 Bad Request');
+            echo json_encode(['message' => 'Invalid task ID']);
+            exit();
+        }
+    
+        if ($task->delete($id)) {
+            echo json_encode(['message' => 'Task deleted']);
+        } else {
+            echo json_encode(['message' => 'Error while deleting the task']);
+        }
+    }
 }
 ?>

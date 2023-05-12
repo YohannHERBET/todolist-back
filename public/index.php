@@ -36,6 +36,15 @@ switch ($method) {
     case 'POST':
         $taskController->createTask();
         break;
+    case 'DELETE':
+        if (isset($uri[2])) {
+            $id = $uri[2];
+            $taskController->deleteTask($id); 
+        } else {
+            header('HTTP/1.1 400 Bad Request');
+            echo json_encode(['message' => 'Problem with the task id']);
+        }
+        break;
     // if we don't have a case, it's a default, the default return a 405 status code, because method not supported
     default:
         header('HTTP/1.1 405 Method Not Allowed');
