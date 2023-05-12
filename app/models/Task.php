@@ -15,7 +15,7 @@ class Task
     // Method fetch all tasks
     public function fetchAll() {
         // SQL query to retrieve all tasks from the "tasks" table
-        $sql = "SELECT * FROM tasks";
+        $sql = "SELECT * FROM tasks ORDER BY tasks.date";
 
         // Launch the request
         $stmt = $this->connection->query($sql);
