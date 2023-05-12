@@ -1,6 +1,6 @@
 # ToDo List Backend Project
 This project is a todo list API that allows creating, retrieving, updating, and deleting tasks.
-It is developed in PHP for the backend, while the frontend part is in another repository.
+It is developed in PHP for the backend, while the frontend part is in another repository here => { https://github.com/YohannHERBET/todolist-front }
 
 ## Features
 - Creation of tasks with a date, name, and description
