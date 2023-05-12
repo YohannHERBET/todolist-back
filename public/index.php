@@ -36,6 +36,15 @@ switch ($method) {
     case 'POST':
         $taskController->createTask();
         break;
+    case 'PUT':
+        if (isset($uri[2])) {
+            $id = $uri[2];
+            $taskController->updateTask($id);
+        } else {
+            header('HTTP/1.1 400 Bad Request');
+            echo json_encode(['message' => 'Problem with the task id']);
+        }
+        break;
     case 'DELETE':
         if (isset($uri[2])) {
             $id = $uri[2];
