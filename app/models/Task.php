@@ -12,7 +12,7 @@ class Task
         // The constructor takes a PDO connection as a parameter and assigns it to the $connection variable
         $this->connection = $db;
     }
-
+    // Method fetch all tasks
     public function fetchAll() {
         // SQL query to retrieve all tasks from the "tasks" table
         $sql = "SELECT * FROM tasks";
@@ -39,10 +39,21 @@ class Task
         $stmt->bindParam(':description', $description);
 
         // Execute the prepared query
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return false;
-        }
+        return $stmt->execute();
+    }
+    // Method for delete a task
+    public function delete($id)
+    {
+        // SQL query to delete a task from the "tasks" table
+        $sql = "DELETE FROM tasks WHERE id = :id";
+
+        // Prepare the SQL query using the PDO connection
+        $stmt = $this->connection->prepare($sql);
+
+        // Bind the values to the prepared query parameters
+        $stmt->bindParam(':id', $id);
+
+        // Execute the prepared query
+        return $stmt->execute();
     }
 }
