@@ -21,7 +21,8 @@ class TaskController {
         $tasks = $task->fetchAll();
         // If the getAllTasks method returns false, return a 500 status code
         if (!$tasks) {
-            header('HTTP/1.1 500 Internal Server Error');
+            header('HTTP/1.1 200 OK');
+            echo json_encode([]);
             exit();
         }
         // If the getAllTasks method returns true, return the tasks in JSON format
